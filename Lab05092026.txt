@@ -1,0 +1,291 @@
+chmod -w file.txt
+
+| Number | Permission                     |
+| ------ | ------------------------------ |
+| 7      | read + write + execute (`rwx`) |
+| 5      | read + execute (`r-x`)         |
+| 5      | read + execute (`r-x`)         |
+
+chmod 700 backup.sh
+
+Owner   → rwx
+Group   → r-x
+Others  → r-x
+
+chmod 644 file.txt
+chmod 755 script.sh
+chmod 700 private.sh
+chmod +x script.sh
+chmod -x script.sh
+
+
+
+
+
+
+
+
+
+
+
+7 = 4+2+1 = rwx
+6 = 4+2 = rw-
+5 = 4+1 = r-x
+4 = 4 = r--
+==========================================================
+find . -name "test.txt"
+
+. → search from the current directory
+-name → search by name
+"test.txt" → filename
+
+find . -name "*.txt"
+
+find . -type f
+find /home -name "notes.txt"
+
+find . -type f -size +10M
+find . -name "*.tmp" -delete
+find . -name "*.tmp" -exec rm -f {} \;
+find /home/user/logs -name "*.log" -exec rm -f {} \;
+find . -name "*.txt" -exec chmod 644 {} \;
+find /home/user/logs -name "*.log" -exec rm -f {} \;
+find . -name "*.sh" -exec chmod +x {} \;
+find . -type f -exec ls -l {} \;
+find . -type f -empty -exec rm -f {} \;
+find . -name "*.tmp" -exec echo {} \;
+find . -name "*.txt" -exec rm -i {} \;
+find /home/user/logs -name "*.log" -exec rm -i {} \;
+=============================================================
+Sample program 1
+```bash
+#!/bin/bash
+
+echo "Enter first number:"
+read num1
+
+echo "Enter second number:"
+read num2
+
+sum=$((num1 + num2))
+
+echo "Addition = $sum"
+==================================================================
+#!/bin/bash
+
+for i in {1..5}
+do
+    touch "file$i.txt"
+done
+
+echo "5 files created successfully"
+
+This creates:
+
+file1.txt
+file2.txt
+file3.txt
+file4.txt
+file5.txt
+=======================================================
+```bash
+#!/bin/bash
+
+echo "Enter a number:"
+read num
+
+if [ $num -gt 0 ]
+then
+    echo "Number is positive"
+else
+    echo "Number is zero or negative"
+fi
+
+
+### Example Output
+
+```text
+Enter a number:
+10
+Number is positive
+```
+
+### Another simple example: Check even or odd
+
+```bash
+#!/bin/bash
+
+echo "Enter a number:"
+read num
+
+if [ $((num % 2)) -eq 0 ]
+then
+    echo "Number is even"
+else
+    echo "Number is odd"
+fi
+```
+=======================================
+Case Example:
+
+```bash
+#!/bin/bash
+
+echo "Enter first number:"
+read num1
+
+echo "Enter second number:"
+read num2
+
+echo "Select an operation:"
+echo "1. Addition"
+echo "2. Subtraction"
+echo "3. Multiplication"
+echo "4. Division"
+
+read choice
+
+case $choice in
+    1)
+        result=$((num1 + num2))
+        echo "Addition = $result"
+        ;;
+
+    2)
+        result=$((num1 - num2))
+        echo "Subtraction = $result"
+        ;;
+
+    3)
+        result=$((num1 * num2))
+        echo "Multiplication = $result"
+        ;;
+
+    4)
+        if [ $num2 -eq 0 ]
+        then
+            echo "Cannot divide by zero"
+        else
+            result=$((num1 / num2))
+            echo "Division = $result"
+        fi
+        ;;
+
+    *)
+        echo "Invalid choice"
+        ;;
+esac
+
+
+### Example Output
+
+```text
+Enter first number:
+20
+Enter second number:
+5
+
+Select an operation:
+1. Addition
+2. Subtraction
+3. Multiplication
+4. Division
+
+3
+Multiplication = 100
+```
+
+### Run it
+
+```bash
+vi calculator.sh
+chmod +x calculator.sh
+./calculator.sh
+```
+==========================================================
+example of Arry:
+Find the sum of array elements
+#!/bin/bash
+
+numbers=(10 20 30 40 50)
+
+sum=0
+
+for i in "${numbers[@]}"
+do
+    sum=$((sum + i))
+done
+
+echo "Sum = $sum"
+===============================================================
+if else example
+
+#!/bin/bash
+
+echo "Enter a number:"
+read num
+
+if [ $num -gt 0 ]
+then
+    echo "Number is Positive"
+else
+    echo "Number is Negative or Zero"
+fi
+
+
+### Example Output
+==============================Splunk==================================
+Splunk is a software platform used to collect, search, monitor, and analyze machine-generated data, 
+especially logs from servers, applications, networks, and security systems.
+
+Show all ERROR messages
+Show failed logins
+How many errors happened today?
+Which server has the most errors?
+-------------------------------------------------------------------
+
+Splunk Cloud Platform URL: https://prd-p-7bp0u.splunkcloud.com
+User Name: sc_admin
+Temporary Password: g975t1ogmodwv4j6
+Confirm pAssword: jCare12#$
+```text
+Enter a number:
+25
+Number is Positive
+```
+
+### Another common practical: Even or Odd
+
+```bash
+#!/bin/bash
+
+echo "Enter a number:"
+read num
+
+if [ $((num % 2)) -eq 0 ]
+then
+    echo "Number is Even"
+else
+    echo "Number is Odd"
+fi
+```
+
+### Run the program
+
+```bash
+vi ifelse.sh
+chmod +x ifelse.sh
+./ifelse.sh
+```
+
+**Basic `if-else` structure:**
+
+```bash
+if [ condition ]
+then
+    commands
+else
+    commands
+fi
+```
+==============================================================
