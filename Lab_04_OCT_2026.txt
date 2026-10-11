@@ -1,0 +1,78 @@
+The SQL SELECT Statement
+
+The SELECT statement is used to select data from a database/table.
+
+select * from actor;
+
+The SQL SELECT DISTINCT Statement
+The SELECT DISTINCT statement is used to return only distinct (unique) values.
+
+postgres=# SELECT DISTINCT film_id
+FROM inventory;
+
+postgres=# select count(DISTINCT film_id)
+FROM inventory;
+ count
+-------
+   958
+(1 row)
+
+postgres=#
+
+The SQL WHERE Clause
+The WHERE clause is used to filter records.
+
+The WHERE clause is used to extract only those records that fulfill a specific condition.
+
+postgres=# select * from inventory where film_id = '652';
+ inventory_id | film_id | store_id |     last_update
+--------------+---------+----------+---------------------
+         2976 |     652 |        1 | 2006-02-15 10:09:17
+         2977 |     652 |        1 | 2006-02-15 10:09:17
+         2978 |     652 |        1 | 2006-02-15 10:09:17
+         2979 |     652 |        1 | 2006-02-15 10:09:17
+(4 rows)
+
+postgres=#
+
+postgres=# select * from inventory where inventory_id='2976' or  inventory_id='2977';
+ inventory_id | film_id | store_id |     last_update
+--------------+---------+----------+---------------------
+         2976 |     652 |        1 | 2006-02-15 10:09:17
+         2977 |     652 |        1 | 2006-02-15 10:09:17
+(2 rows)
+
+postgres=#
+
+postgres=# select * from inventory where inventory_id='2976' or  inventory_id='2977';
+ inventory_id | film_id | store_id |     last_update
+--------------+---------+----------+---------------------
+         2976 |     652 |        1 | 2006-02-15 10:09:17
+         2977 |     652 |        1 | 2006-02-15 10:09:17
+(2 rows)
+
+postgres=# select min(inventory_id) from inventory;
+ min
+-----
+   1
+(1 row)
+
+postgres=# select max(inventory_id) from inventory;
+ max
+------
+ 4581
+(1 row)
+
+postgres=# select sum(inventory_id) from inventory;
+   sum
+----------
+ 10495071
+(1 row)
+
+postgres=# select avg(inventory_id) from inventory;
+          avg
+-----------------------
+ 2291.0000000000000000
+(1 row)
+
+postgres=#

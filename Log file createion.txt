@@ -1,0 +1,33 @@
+nano generate_logs.sh
+
+#!/bin/bash
+
+# 1. Fetch current date for the filename (e.g., 2026-09-13)
+CURRENT_DATE=$(date "+%Y-%m-%d")
+LOG_FILE="log_${CURRENT_DATE}.log"
+
+# Function to write logs with a standard ISO 8601 record date
+log_message() {
+    local LEVEL=$1
+    local COMPONENT=$2
+    local MESSAGE=$3
+    # Generates date format: 2026-09-13 15:42:05
+    local TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
+
+    echo "[$TIMESTAMP] [$LEVEL] [$COMPONENT] - $MESSAGE" >> "$LOG_FILE"
+}
+
+# Simulate writing standard application records
+log_message "INFO" "AuthService" "User 'bright_dev' initiated login protocol."
+log_message "WARN" "Database" "Query execution time exceeded 200ms threshold."
+log_message "ERROR" "PaymentGateway" "Connection timed out to external API provider."
+log_message "INFO" "System" "Background disk clean-up routine finished successfully."
+
+echo "Log file 'application.log' created and populated successfully!"
+
+chmod +x generate_logs.sh
+./generate_logs.sh
+
+
+cat application.log
+

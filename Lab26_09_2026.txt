@@ -1,0 +1,221 @@
+Lab:
+
+bright=# \! clear
+
+bright=# \c postgres
+You are now connected to database "postgres" as user "postgres".
+
+postgres=# \conninfo
+           Connection Information
+      Parameter       |        Value
+----------------------+---------------------
+ Database             | postgres
+ Client User          | postgres
+ Socket Directory     | /var/run/postgresql
+ Server Port          | 5432
+ Options              |
+ Protocol Version     | 3.0
+ Password Used       | false
+ GSSAPI Authenticated | false
+ Backend PID          | 6027
+ SSL Connection       | false
+ Superuser            | on
+ Hot Standby          | off
+(12 rows)
+
+postgres=# \dt
+              List of tables
+ Schema |     Name      | Type  |  Owner
+--------+---------------+-------+----------
+ public | actor         | table | postgres
+ public | address       | table | postgres
+ public | category      | table | postgres
+ public | city          | table | postgres
+ public | country       | table | postgres
+ public | customer      | table | postgres
+ public | film          | table | postgres
+ public | film_actor    | table | postgres
+ public | film_category | table | postgres
+ public | inventory     | table | postgres
+ public | language      | table | postgres
+ public | payment       | table | postgres
+ public | rental        | table | postgres
+ public | staff         | table | postgres
+ public | store         | table | postgres
+(15 rows)
+
+postgres=#
+
+postgres=# SELECT current_database();
+ current_database
+------------------
+ postgres
+(1 row)
+
+postgres=#
+
+\l
+    Lists all available databases.
+\c db_name
+    Connects to a different database.
+\dt
+    Lists all tables in the current database.
+\d table_name
+    Shows the structure (columns, types, indexes) of a specific table.
+\du
+    Lists all users and their privileges.
+\q
+    Quits the psql terminal.
+
+crtl+c reset prompt
+CREATE SCHEMA student;
+
+CREATE TABLE student.profiles (
+    student_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    enrollment_date DATE
+);
+
+CREATE TABLE it.profiles (
+    student_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    enrollment_date DATE
+);
+
+SELECT * FROM student.profiles;
+
+
+
+INSERT INTO student.profiles (name, enrollment_date)
+SELECT 
+    'Student ' || i AS name,
+    CURRENT_DATE - (random() * 365)::integer AS enrollment_date
+FROM generate_series(1, 100) AS i;
+
+
+
+INSERT INTO student.profiles (name, enrollment_date)
+SELECT 
+    first_names[floor(random() * array_length(first_names, 1) + 1)] || ' ' || 
+    last_names[floor(random() * array_length(last_names, 1) + 1)] AS name,
+    CURRENT_DATE - (random() * 365)::integer AS enrollment_date
+FROM (
+    SELECT 
+        ARRAY['Aarav', 'Vivaan', 'Aditya', 'Sai', 'Arjun', 'Ananya', 'Diya', 'Isha', 'Aadhya', 'Pranav', 'Rahul', 'Sneha', 'Rohan', 'Priya', 'Vikram', 'Deepak', 'Rajesh', 'Amit', 'Neha', 'Karan'] AS first_names,
+        ARRAY['Sharma', 'Verma', 'Kumar', 'Singh', 'Patel', 'Joshi', 'Nair', 'Reddy', 'Gupta', 'Mehta', 'Mishra', 'Yadav', 'Kulkarni', 'Das', 'Choudhury', 'Rao'] AS last_names
+) AS name_pools,
+generate_series(1, 100);
+
+
+bright=# SELECT * FROM student.profiles ORDER BY student_id DESC LIMIT 15;
+ student_id |      name       | enrollment_date
+------------+-----------------+-----------------
+        100 | Amit Yadav      | 2025-12-11
+         99 | Karan Patel     | 2026-05-19
+         98 | Rajesh Nair     | 2026-06-17
+         97 | Vivaan Reddy    | 2026-06-21
+         96 | Vivaan Mehta    | 2026-05-28
+         95 | Ananya Gupta    | 2026-01-25
+         94 | Sneha Mishra    | 2026-06-28
+         93 | Diya Singh      | 2026-09-03
+         92 | Arjun Choudhury | 2026-04-21
+         91 | Isha Joshi      | 2025-12-31
+         90 | Priya Mishra    | 2026-01-03
+         89 | Sai Mehta       | 2026-03-22
+         88 | Neha Singh      | 2026-03-01
+         87 | Arjun Patel     | 2026-06-02
+         86 | Sneha Verma     | 2026-03-21
+(15 rows)
+
+bright=#
+
+bright=# ALTER TABLE it.profiles
+ADD COLUMN email VARCHAR(150),
+ADD COLUMN state VARCHAR(50);
+ALTER TABLE
+bright=#
+
+bright=# \d student.profiles;
+                                                Table "student.profiles"
+     Column      |          Type          | Collation | Nullable |                       Default
+-----------------+------------------------+-----------+----------+------------------------------------------------------
+ student_id      | integer                |           | not null | nextval('student.profiles_student_id_seq'::regclass)
+ name            | character varying(100) |           |          |
+ enrollment_date | date                   |           |          |
+ email           | character varying(150) |           |          |
+ state           | character varying(50)  |           |          |
+Indexes:
+    "profiles_pkey" PRIMARY KEY, btree (student_id)
+
+bright=#
+
+CREATE SCHEMA
+bright=# \dn
+       List of schemas
+  Name   |       Owner
+---------+-------------------
+ library | postgres
+ public  | pg_database_owner
+ student | postgres
+(3 rows)
+
+bright=#
+
+bright=# SELECT schema_name
+FROM information_schema.schemata;
+    schema_name
+--------------------
+ public
+ library
+ student
+ information_schema
+ pg_catalog
+ pg_toast
+(6 rows)
+
+bright=#
+====================================================
+CREATE ROLE bright WITH LOGIN PASSWORD 'your_secure_password';
+
+GRANT CONNECT ON DATABASE bright TO bright;
+
+GRANT USAGE, CREATE ON SCHEMA student TO bright;
+GRANT USAGE, CREATE ON SCHEMA library TO bright;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA student TO bright;
+
+\du
+
+CREATE ROLE dba_user WITH LOGIN SUPERUSER PASSWORD 'your_secure_password';
+
+\du
+
+psql -U dba_user -d bright -W
+
+bright=# SELECT current_user;
+ current_user
+--------------
+ postgres
+(1 row)
+
+bright=#
+
+bright=# \dt student.*
+            List of tables
+ Schema  |   Name   | Type  |  Owner
+---------+----------+-------+----------
+ student | profiles | table | postgres
+(1 row)
+
+bright=#
+
+bright=# \dt student.*
+            List of tables
+ Schema  |   Name   | Type  |  Owner
+---------+----------+-------+----------
+ student | profiles | table | postgres
+(1 row)
+
+bright=#
+
+===================================================
